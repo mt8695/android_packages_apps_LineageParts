@@ -84,7 +84,11 @@ public class KeyHandler implements DeviceKeyHandler {
             launchIntent.putExtra("no_input_mode", true);
         } else {
             launchIntent = mContext.getPackageManager()
-                    .getLaunchIntentForPackage(packageName);
+                    .getLeanbackLaunchIntentForPackage(packageName);
+            if (launchIntent == null) {
+                launchIntent = mContext.getPackageManager()
+                        .getLaunchIntentForPackage(packageName);
+            }
         }
 
         if (launchIntent != null) {
