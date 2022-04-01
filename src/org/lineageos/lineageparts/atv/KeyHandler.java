@@ -19,6 +19,7 @@ package org.lineageos.lineageparts.atv;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.SystemProperties;
 import android.provider.Settings;
 import android.util.Log;
@@ -96,6 +97,15 @@ public class KeyHandler implements DeviceKeyHandler {
         } else {
             Log.w(TAG, "Cannot launch " + packageName +
                     ": package not found.");
+            launchIntent = new Intent(Intent.ACTION_VIEW);
+            launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            launchIntent.setData(Uri.parse("market://details?id=" + packageName));
+            try {
+                mContext.startActivity(launchIntent);
+            } catch (android.content.ActivityNotFoundException e) {
+                Log.w(TAG, "Cannot view " + packageName + " in market" +
+                        ": no market installed.");
+            }
         }
     }
 }
