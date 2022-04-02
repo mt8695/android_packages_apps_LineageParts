@@ -52,7 +52,7 @@ public class KeyHandler implements DeviceKeyHandler {
     }
 
     public KeyEvent handleKeyEvent(KeyEvent event) {
-        if (event.getAction() != KeyEvent.ACTION_UP || !hasSetupCompleted()) {
+        if (!hasSetupCompleted()) {
             return event;
         }
 
@@ -60,7 +60,9 @@ public class KeyHandler implements DeviceKeyHandler {
         String packageName = KEYMAP.get(keyCode);
 
         if (packageName != null) {
-            launchActivity(packageName);
+            if (event.getAction() == KeyEvent.ACTION_UP) {
+                launchActivity(packageName);
+            }
             return null;
         }
 
