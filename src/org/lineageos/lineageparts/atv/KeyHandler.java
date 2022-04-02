@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.SystemProperties;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -93,7 +94,7 @@ public class KeyHandler implements DeviceKeyHandler {
         }
 
         if (launchIntent != null) {
-            mContext.startActivity(launchIntent);
+            mContext.startActivityAsUser(launchIntent, new UserHandle(UserHandle.USER_CURRENT));
         } else {
             Log.w(TAG, "Cannot launch " + packageName +
                     ": package not found.");
@@ -101,7 +102,7 @@ public class KeyHandler implements DeviceKeyHandler {
             launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             launchIntent.setData(Uri.parse("market://details?id=" + packageName));
             try {
-                mContext.startActivity(launchIntent);
+                mContext.startActivityAsUser(launchIntent, new UserHandle(UserHandle.USER_CURRENT));
             } catch (android.content.ActivityNotFoundException e) {
                 Log.w(TAG, "Cannot view " + packageName + " in market" +
                         ": no market installed.");
